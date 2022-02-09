@@ -50,7 +50,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println("Speed:"+0+" Distance:"+Constants.shooter_encoder.getDistance()+ "asd:"+Constants.shooter_encoder.getRate());
+    System.out.println("Speed:"+speed+" Distance:"+Constants.shooter_encoder.getDistance()+ "asd:"+Constants.shooter_encoder.getRate());
   }
 
   

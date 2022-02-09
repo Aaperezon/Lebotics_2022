@@ -36,7 +36,7 @@ public final class Constants {
         Constants.shooter_encoder.setDistancePerPulse(Math.PI*Constants.wheel_diameter/Constants.counts_per_revolution); //distance per pulse is pi* (wheel diameter / counts per revolution)
         
         chassis_motor_right1.setInverted(true);
-        chassis_motor_left1.setInverted(true);
+        //chassis_motor_left1.setInverted(true);
         chassis_motor_right2.follow(chassis_motor_right1);
         chassis_motor_left2.follow(chassis_motor_left1);
         chassis_motor_right2.setInverted(InvertType.FollowMaster);
