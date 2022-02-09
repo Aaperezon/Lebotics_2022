@@ -6,16 +6,15 @@ package frc.robot;
 import frc.robot.LeboticsController;
 import frc.robot.commands.ShooterCommand;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 public final class Constants {
     public static LeboticsController driver1 = new LeboticsController( new XboxController(0));
     public static LeboticsController driver2 = new LeboticsController( new XboxController(1));
@@ -24,14 +23,32 @@ public final class Constants {
     public static Encoder shooter_encoder = new Encoder(8,9);
     private static final double counts_per_revolution = 5; 
     private static final double wheel_diameter = 6; 
+    
+    public static Spark intake_servo = new Spark(8);
+    public static DigitalInput intake_upper_switch = new DigitalInput(7);
+    public static DigitalInput intake_lower_switch = new DigitalInput(6);
+    public static Spark intake_motor = new Spark(7);
 
 
-
-
+    private static VictorSPX chassis_motor_left1 = new VictorSPX(1);
+    private static VictorSPX chassis_motor_left2 = new VictorSPX(2);
+    private static VictorSPX chassis_motor_right1 = new VictorSPX(0);
+    private static VictorSPX chassis_motor_right2 = new VictorSPX(2);
     
     public Constants(){
         Constants.shooter_encoder.setDistancePerPulse(Math.PI*Constants.wheel_diameter/Constants.counts_per_revolution); //distance per pulse is pi* (wheel diameter / counts per revolution)
+        
+        chassis_motor_right1.setInverted(true);
+        chassis_motor_left1.setInverted(true);
+        chassis_motor_right2.follow(chassis_motor_right1);
+        chassis_motor_left2.follow(chassis_motor_left1);
+        chassis_motor_right2.setInverted(InvertType.FollowMaster);
+        chassis_motor_left2.setInverted(InvertType.FollowMaster);
+    }
 
+    public static void drive(double speed1, double speed2){
+        chassis_motor_left1.set(ControlMode.PercentOutput ,speed1);
+        chassis_motor_right1.set(ControlMode.PercentOutput ,speed2);
     }
 
 

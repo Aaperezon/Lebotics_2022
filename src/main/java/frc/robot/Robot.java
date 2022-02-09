@@ -70,7 +70,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     Command shooterCommand = m_robotContainer.getShooterCommand();
+    Command intakeCommand = m_robotContainer.getIntakeCommand();
+    Command climberCommand = m_robotContainer.getClimberCommand();
+    Command chassisCommand = m_robotContainer.getChassisCommand();
     shooterCommand.schedule();
+    intakeCommand.schedule();
+    climberCommand.schedule();
+    chassisCommand.schedule();
 
 
 
