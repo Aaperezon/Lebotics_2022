@@ -4,6 +4,7 @@
 
 package frc.robot;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import frc.robot.commands.ChassisCommand;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
@@ -37,8 +38,8 @@ public final class Constants {
         
         //chassis_motor_right1.setInverted(true);
         //chassis_motor_left1.setInverted(true);
-        chassis_motor_right2.follow(chassis_motor_right1);
-        chassis_motor_left2.follow(chassis_motor_left1);
+        //chassis_motor_right2.follow(chassis_motor_right1);
+        //chassis_motor_left2.follow(chassis_motor_left1);
 
         //chassis_motor_right2.setInverted(InvertType.FollowMaster);
         //chassis_motor_left2.setInverted(InvertType.FollowMaster);
@@ -46,7 +47,9 @@ public final class Constants {
 
     public static void drive(double speed1, double speed2){
         chassis_motor_left1.set(ControlMode.PercentOutput ,speed1);
+        chassis_motor_left2.set(ControlMode.PercentOutput, speed1);
         chassis_motor_right1.set(ControlMode.PercentOutput ,-speed2);
+        chassis_motor_right2.set(ControlMode.PercentOutput ,-speed2);
     }
 
 
