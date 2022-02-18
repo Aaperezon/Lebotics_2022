@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -12,7 +13,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private double speed, interval;
   private double MAX, MIN;
   private boolean modify_up, modify_down;
-
+  private int P,I,D;
+  private int integral, previous_error, setpoint;
 
   public ShooterSubsystem() {
     speed = 0;
@@ -21,7 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
     MIN = -1.0;
     modify_up = true;
     modify_down = true;
-
+    setpoint =0 ;
   }
   public void canModify(){
     modify_up = true;
@@ -50,7 +52,10 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println("Speed:"+speed+" asd:"+Constants.shooter_encoder.getRate()+ "RPM:"+Constants.shooter_encoder.getRate()*60/120);
+    //System.out.println("Speed:"+speed+" asd:"+Constants.shooter_encoder.getRate()+ "RPM:"+Constants.shooter_encoder.getRate()*60/120);
+    SmartDashboard.putNumber("Shooter Speed", speed*10);
+    SmartDashboard.putNumber("RPM", Constants.shooter_encoder.getRate()*60/120);
+
   }
 
   

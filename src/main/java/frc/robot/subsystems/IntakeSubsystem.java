@@ -13,14 +13,14 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void lift(double speed){
-    if(!Constants.intake_upper_switch.get()){
+    if(Constants.intake_upper_switch.get()){
       Constants.intake_servo.set(speed);
     }else{
       stop_servo();
     }
   }
   public void lower(double speed){
-    if(!Constants.intake_lower_switch.get()){
+    if(Constants.intake_lower_switch.get()){
       Constants.intake_servo.set(-speed);
     }else{
       stop_servo();
@@ -30,10 +30,10 @@ public class IntakeSubsystem extends SubsystemBase {
     Constants.intake_servo.set(0);
   }
   public void forward(){
-    Constants.intake_motor.set(.3);
+    Constants.intake_motor.set(1);
   }
   public void backward(){
-    Constants.intake_motor.set(-.3);
+    Constants.intake_motor.set(-1);
   }
   public void stop_motor(){
     Constants.intake_motor.set(0);

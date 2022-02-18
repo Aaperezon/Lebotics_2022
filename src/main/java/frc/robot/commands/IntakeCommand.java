@@ -10,7 +10,7 @@ public class IntakeCommand extends CommandBase {
   public IntakeCommand(IntakeSubsystem subsystem) {
     m_subsystem = subsystem;
     addRequirements(subsystem);
-    max_speed = .4;
+    max_speed = 1;
   }
 
   @Override
