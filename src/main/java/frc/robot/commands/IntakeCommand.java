@@ -29,9 +29,9 @@ public class IntakeCommand extends CommandBase {
       m_subsystem.stop_servo();
     }
     
-    if(Constants.driver2.getRB()){
+    if(Constants.driver1.getRB()){
       m_subsystem.backward();
-    }else if(Constants.driver2.getLB()){
+    }else if(Constants.driver1.getLB()){
       m_subsystem.forward();
     }else{
       m_subsystem.stop_motor();

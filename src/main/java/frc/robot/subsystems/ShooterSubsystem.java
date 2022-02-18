@@ -80,9 +80,13 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
-
+  public void shootManual(){
+    Constants.shooter_motor.set(speed);
+  }
   public void shoot(){
-    Constants.shooter_motor.set(Constants.shooter_pid.calculate(getRPM(), getTarget()));
+    double test = Constants.shooter_pid.calculate(getRPM(), getTarget());
+    Constants.shooter_motor.set(test);
+    System.out.println(test);
   }
   
   public void stop(){
