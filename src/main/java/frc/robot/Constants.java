@@ -6,6 +6,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.commands.ChassisCommand;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,6 +23,7 @@ public final class Constants {
     public static Encoder shooter_encoder = new Encoder(9,8);
     private static final double counts_per_revolution = 5; 
     private static final double wheel_diameter = 6; 
+    public static final PIDController shooter_pid = new PIDController(0, 0, 0);
     
     public static Spark intake_servo = new Spark(8);
     public static DigitalInput intake_upper_switch = new DigitalInput(7);
