@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.AimSubsystem;
 
 public class AimCommand extends CommandBase {
@@ -23,7 +24,7 @@ public class AimCommand extends CommandBase {
     m_subsystem = subsystem;
     addRequirements(subsystem);
     terminate = false;
-    aim_pid = new PIDController(0, 0, 0);
+    aim_pid = new PIDController(.025, 0, 0);
   }
 
   // Called when the command is initially scheduled.
@@ -34,13 +35,9 @@ public class AimCommand extends CommandBase {
   @Override
   public void execute() {
     NetworkTableEntry x_target = table.getEntry("tx");
-
-    System.out.println(x_target.getDouble(0));
-    // double targetOffsetAngle_Horizontal = table.getNumber("tx", 0);
-
-    // aim_pid.calculate(measurement, 0)
-
-
+    double speed = aim_pid.calculate(x_target.getDouble(0), 0);
+    System.out.println(speed);
+    m_subsystem.move(-speed, speed);
   }
 
   // Called once the command ends or is interrupted.
