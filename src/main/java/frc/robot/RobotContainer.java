@@ -1,9 +1,11 @@
 package frc.robot;
 
+import frc.robot.commands.AimCommand;
 import frc.robot.commands.ChassisCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.subsystems.AimSubsystem;
 import frc.robot.subsystems.ChassisSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -22,6 +24,12 @@ public class RobotContainer {
 
   private final ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
   private final ChassisCommand chassisCommand = new ChassisCommand(chassisSubsystem);
+
+  
+  private final AimSubsystem aimSubsystem = new AimSubsystem();
+  private final AimCommand aimCommand = new AimCommand(aimSubsystem);
+
+
   public RobotContainer() {
     configureButtonBindings();
   }
@@ -30,7 +38,9 @@ public class RobotContainer {
   private void configureButtonBindings() {}
 
   
- 
+  public Command getAimCommand(){
+    return aimCommand;
+  }
   public Command getShooterCommand(){
     return shooterCommand;
   }

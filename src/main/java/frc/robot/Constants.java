@@ -36,6 +36,11 @@ public final class Constants {
     private static VictorSPX chassis_motor_right1 = new VictorSPX(0);
     private static VictorSPX chassis_motor_right2 = new VictorSPX(3);
     
+    
+    public static Spark climber_left = new Spark(6);
+    public static Spark climber_right = new Spark(5);
+
+
     public Constants(){
         Constants.shooter_encoder.setDistancePerPulse(Math.PI*Constants.wheel_diameter/Constants.counts_per_revolution); //distance per pulse is pi* (wheel diameter / counts per revolution)
         

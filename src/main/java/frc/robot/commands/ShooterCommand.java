@@ -59,8 +59,8 @@ public class ShooterCommand extends CommandBase {
     //   m_subsystem.canModify();
     // }
 
-    // SmartDashboard.putNumber("Target", m_subsystem.getTarget());
-    // SmartDashboard.putNumber("RPM", m_subsystem.getRPM());
+    SmartDashboard.putNumber("Target", m_subsystem.getTarget());
+    SmartDashboard.putNumber("RPM", m_subsystem.getRPM());
 
 
     // m_subsystem.setkP(.02); 

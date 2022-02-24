@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class ClimberCommand extends CommandBase {
@@ -19,7 +20,11 @@ public class ClimberCommand extends CommandBase {
   public void initialize() {}
 
   @Override
-  public void execute() {}
+  public void execute() {
+    // m_subsystem.move(Constants.driver2.getLY());
+    m_subsystem.moveLeft(Constants.driver2.getLY());
+    m_subsystem.moveRight(Constants.driver2.getRY());
+  }
 
   @Override
   public void end(boolean interrupted) {}

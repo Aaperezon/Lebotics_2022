@@ -30,7 +30,10 @@ public class IntakeSubsystem extends SubsystemBase {
     Constants.intake_servo.set(0);
   }
   public void forward(){
-    Constants.intake_motor.set(1);
+    Constants.intake_motor.set(.8);
+  }
+  public void forward(double s){
+    Constants.intake_motor.set(s);
   }
   public void backward(){
     Constants.intake_motor.set(-1);

@@ -6,7 +6,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeCommand extends CommandBase {
   private final IntakeSubsystem m_subsystem;
-  private double lift_value, lower_value, max_speed;
+  private double  lower_value, max_speed;
+  private boolean lift_value;
   public IntakeCommand(IntakeSubsystem subsystem) {
     m_subsystem = subsystem;
     addRequirements(subsystem);
@@ -18,21 +19,21 @@ public class IntakeCommand extends CommandBase {
 
   @Override
   public void execute() {
-    lift_value = Constants.driver2.getRTRIGGER();
-    lower_value = Constants.driver2.getLTRIGGER();
-    if(lift_value >= .1){
-      m_subsystem.lift(lift_value*max_speed);
+    lift_value = Constants.driver1.getX();
+    lower_value = Constants.driver1.getLTRIGGER();
+    if(lift_value){
+      m_subsystem.lift(1);
     }
     else if(lower_value >= .1){
       m_subsystem.lower(lower_value*max_speed);
     }else{
       m_subsystem.stop_servo();
     }
-    
-    if(Constants.driver1.getRB()){
+    double take_ball = Constants.driver1.getRTRIGGER();
+    if(take_ball >= .1){
+      m_subsystem.forward(take_ball);
+    }else if(Constants.driver1.getB()){
       m_subsystem.backward();
-    }else if(Constants.driver1.getLB()){
-      m_subsystem.forward();
     }else{
       m_subsystem.stop_motor();
     }
