@@ -14,6 +14,13 @@ public class ChassisSubsystem extends SubsystemBase {
     speed = 1;
     speedV = .4;
   }
+  public void drive(double left_speed, double right_speed){
+    if( (left_speed >= .1 || left_speed <= -.1) && (right_speed >= .1 || right_speed <= -.1)){
+      Constants.drive(left_speed, right_speed);
+    }else{
+      Constants.drive(0, 0);
+    }
+  }
   public void drive(double throttle1, double throttle_turn, boolean left, boolean right) {
 		if (throttle1 >= .1) {
 			if (throttle_turn >= 0.1) {

@@ -6,15 +6,15 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
-
-
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class ShooterCommand extends CommandBase {
   private final ShooterSubsystem m_subsystem;
-
+  boolean camOn = false;
+  boolean camOff = false;
 
   private boolean shoot_on, shoot_off;
   public ShooterCommand(ShooterSubsystem subsystem) {
@@ -88,8 +88,23 @@ public class ShooterCommand extends CommandBase {
     }
 
 
-
-
+    //Change camera mode: target/nomal view
+    if(camOn) {
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(1);
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+    }else{
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+    }
+    if (Constants.driver2.getSTART()) {
+      if (!camOff) {
+        camOn = !camOn;
+        camOff = true;
+      }
+    }
+    else {
+      camOff = false;
+    }
 
   }
 

@@ -10,16 +10,15 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.AimSubsystem;
+import frc.robot.subsystems.ChassisSubsystem;
+import frc.robot.subsystems.ChassisSubsystem;
 
 public class AimCommand extends CommandBase {
-  AimSubsystem m_subsystem;
+  ChassisSubsystem m_subsystem;
   boolean terminate;
   private PIDController aim_pid;
-  NetworkTable table;
-  public AimCommand(AimSubsystem subsystem) {
-    NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    table = inst.getTable("limelight-lebotic");
+
+  public AimCommand(ChassisSubsystem subsystem) {
 
     m_subsystem = subsystem;
     addRequirements(subsystem);
@@ -34,10 +33,14 @@ public class AimCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    NetworkTableEntry x_target = table.getEntry("tx");
-    double speed = aim_pid.calculate(x_target.getDouble(0), 0);
-    System.out.println(speed);
-    m_subsystem.move(-speed, speed);
+    double x_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+
+    double speed = aim_pid.calculate(x_target, 0);
+    // System.out.println(speed);
+    m_subsystem.drive(-speed, speed);
+    
+
+
   }
 
   // Called once the command ends or is interrupted.
