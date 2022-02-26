@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -21,7 +22,10 @@ public final class Constants {
     private static final double counts_per_revolution = 5; 
     private static final double wheel_diameter = 6; 
     public static final PIDController shooter_pid = new PIDController(0, 0, 0);
-    
+    public static final Servo left_servo = new Servo(7);
+    public static final Servo right_servo = new Servo(6);
+
+
     public static Spark intake_servo = new Spark(8);
     public static DigitalInput intake_upper_switch = new DigitalInput(7);
     public static DigitalInput intake_lower_switch = new DigitalInput(6);

@@ -72,10 +72,14 @@ public class ShooterCommand extends CommandBase {
     // MANUAL USE
     //Shoot with B
     if(Constants.driver2.getB()){
-      m_subsystem.shootManual();
+      m_subsystem.startEngine();
     }else{
       m_subsystem.stop();
     }
+
+    m_subsystem.shoot(Constants.driver2.getLB());
+
+    
     //SpeedUp
     if(Constants.driver2.getPOV() == 0){
       m_subsystem.speedUp();

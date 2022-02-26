@@ -27,7 +27,7 @@ public class ShootCommand extends CommandBase {
   public void execute() {
     double y_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
     double speed = shoot_pid.calculate(y_target, 0);
-    m_subsystem.shoot(speed);
+    m_subsystem.startEngine(speed);
     SmartDashboard.putNumber("RPM", m_subsystem.getRPM());
     
   }

@@ -79,11 +79,19 @@ public class ShooterSubsystem extends SubsystemBase {
       speed = speed_;
     }
   }
-
-  public void shootManual(){
+  public void shoot(boolean shoot){
+    if(shoot){
+      Constants.left_servo.setAngle(0);
+      Constants.right_servo.setAngle(180);
+    }else{
+      Constants.left_servo.setAngle(90);
+      Constants.right_servo.setAngle(90);
+    }
+  }
+  public void startEngine(){
     Constants.shooter_motor.set(speed);
   }
-  public void shoot(double speed){
+  public void startEngine(double speed){
     // double test = Constants.shooter_pid.calculate(getRPM(), getTarget());
     Constants.shooter_motor.set(speed);
     // System.out.println(test);
