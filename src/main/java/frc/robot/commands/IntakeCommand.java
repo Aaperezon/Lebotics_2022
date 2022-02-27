@@ -19,8 +19,8 @@ public class IntakeCommand extends CommandBase {
 
   @Override
   public void execute() {
-    lift_value = Constants.driver1.getX();
-    lower_value = Constants.driver1.getLTRIGGER();
+    lift_value = Constants.driver1.getXButton();
+    lower_value = Constants.driver1.getLeftTriggerAxis();
     if(lift_value){
       m_subsystem.lift(1);
     }
@@ -29,10 +29,10 @@ public class IntakeCommand extends CommandBase {
     }else{
       m_subsystem.stop_servo();
     }
-    double take_ball = Constants.driver1.getRTRIGGER();
+    double take_ball = Constants.driver1.getRightTriggerAxis();
     if(take_ball >= .1){
       m_subsystem.forward(take_ball);
-    }else if(Constants.driver1.getB()){
+    }else if(Constants.driver1.getBButton()){
       m_subsystem.backward();
     }else{
       m_subsystem.stop_motor();

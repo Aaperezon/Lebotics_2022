@@ -71,13 +71,13 @@ public class ShooterCommand extends CommandBase {
 
     // MANUAL USE
     //Shoot with B
-    if(Constants.driver2.getB()){
+    if(Constants.driver2.getBButton()){
       m_subsystem.startEngine();
     }else{
       m_subsystem.stop();
     }
 
-    m_subsystem.shoot(Constants.driver2.getLB());
+    m_subsystem.shoot(Constants.driver2.getLeftBumper());
 
     
     //SpeedUp
@@ -100,7 +100,7 @@ public class ShooterCommand extends CommandBase {
       NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
       NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
     }
-    if (Constants.driver2.getSTART()) {
+    if (Constants.driver2.getStartButton()) {
       if (!camOff) {
         camOn = !camOn;
         camOff = true;

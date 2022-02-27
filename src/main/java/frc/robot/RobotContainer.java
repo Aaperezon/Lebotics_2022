@@ -1,11 +1,9 @@
 package frc.robot;
 
-import frc.robot.commands.AimCommand;
 import frc.robot.commands.AutonomousShoot;
 import frc.robot.commands.ChassisCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.ChassisSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -14,8 +15,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public final class Constants {
-    public static LeboticsController driver1 = new LeboticsController( new XboxController(0));
-    public static LeboticsController driver2 = new LeboticsController( new XboxController(1));
+    public static XboxController driver1 = new XboxController(0);
+    public static XboxController driver2 = new XboxController(1);
+
 
     public static Spark shooter_motor = new Spark(9);
     public static Encoder shooter_encoder = new Encoder(9,8);

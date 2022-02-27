@@ -10,6 +10,6 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutonomousShoot extends ParallelCommandGroup {
   public AutonomousShoot(ChassisSubsystem chassisSubsystem, ShooterSubsystem shooterSubsystem) {
-    addCommands(new AimCommand(chassisSubsystem), new ShootCommand(shooterSubsystem));
+    addCommands(new AimShootCommand(chassisSubsystem, shooterSubsystem));
   }
 }
