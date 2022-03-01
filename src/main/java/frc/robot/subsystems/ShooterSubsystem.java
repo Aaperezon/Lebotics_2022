@@ -9,12 +9,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
-  private double speed, interval;
+  private double interval;
   private double MAX_speed_motor, MIN_speed_motor, MAX_rpm, MIN_rpm;
   private boolean modify_up, modify_down;
   private double target;
+  long start_time, end_time, current_time, target_time;
+
   public ShooterSubsystem() {
-    speed = 0;
     interval = .1;
     MAX_speed_motor = 1.0;
     MIN_speed_motor = -1.0;
@@ -22,32 +23,30 @@ public class ShooterSubsystem extends SubsystemBase {
     MIN_rpm = 0;
     modify_up = true;
     modify_down = true;
-    Constants.shooter_pid.reset();
+    start_time = System.currentTimeMillis();
+
+
   }
-  public void setkP(double kp){
-    Constants.shooter_pid.setP(kp);
-  }
-  public void setkI(double ki){
-    Constants.shooter_pid.setI(ki);
-  }
-  public void setkD(double kd){
-    Constants.shooter_pid.setD(kd);
-  }
+ 
   public void setTarget(double target_){
     target = target_;
   }
 
-  
-  public double getTarget(){
+
+
+  public void setTargetRPM(double new_target){
+    target = new_target;
+  }
+  public double getTargetRPM(){
     return target;
   }
-  public void setMoreTarget(){
+  public void setMoreTargetRPM(){
     if(target < MAX_rpm && modify_up == true){
       target += 100;
       modify_up = false;
     }
   }
-  public void setLessTarget(){
+  public void setLessTargetRPM(){
     if(target > MIN_rpm && modify_down == true){
       target -= 100;
       modify_down = false;
@@ -62,50 +61,56 @@ public class ShooterSubsystem extends SubsystemBase {
     modify_up = true;
     modify_down = true;
   }
-  public void speedUp(){
-    if(speed < MAX_speed_motor && modify_up == true){
-      speed+=interval;
-      modify_up = false;
-    }
-  }
-  public void speedDown(){
-    if(speed > MIN_speed_motor && modify_down == true){
-      speed-=interval;
-      modify_down = false;
-    }
-  }
-  public void setShooterSpeed(double speed_){
-    if(speed < MAX_speed_motor && speed > MIN_speed_motor){
-      speed = speed_;
-    }
-  }
-  public void shoot(boolean shoot){
-    if(shoot){
-      Constants.left_servo.setAngle(0);
-      Constants.right_servo.setAngle(180);
-    }else{
-      Constants.left_servo.setAngle(90);
-      Constants.right_servo.setAngle(90);
-    }
-  }
-  public void startEngine(){
-    Constants.shooter_motor.set(speed);
-  }
+  // public void speedUp(){
+  //   if(speed < MAX_speed_motor && modify_up == true){
+  //     speed+=interval;
+  //     modify_up = false;
+  //   }
+  // }
+  // public void speedDown(){
+  //   if(speed > MIN_speed_motor && modify_down == true){
+  //     speed-=interval;
+  //     modify_down = false;
+  //   }
+  // }
+  // public void setShooterSpeed(double speed_){
+  //   if(speed < MAX_speed_motor && speed > MIN_speed_motor){
+  //     speed = speed_;
+  //   }
+  // }
+  // public void startEngine(){
+  //   Constants.shooter_motor.set(speed);
+  // }
   public void startEngine(double speed){
-    // double test = Constants.shooter_pid.calculate(getRPM(), getTarget());
     Constants.shooter_motor.set(speed);
     // System.out.println(test);
   }
   
   public void stop(){
     Constants.shooter_motor.set(0);
-    Constants.shooter_pid.reset();
   }
 
- 
+  public void shoot(boolean shoot){
+    if(shoot){
+      Constants.left_servo_shooter.setAngle(0);
+      Constants.right_servo_shooter.setAngle(180);
+      start_time = System.currentTimeMillis();
+    }else{
+      // end_time = System.currentTimeMillis();
+      // current_time = end_time - start_time;
+      // if(current_time < 1000){
+      //   Constants.servo_shooter.setAngle(0);
+      // }else{
+      //   Constants.servo_shooter.setAngle(92);
+      // }
+      Constants.left_servo_shooter.setAngle(90);
+      Constants.right_servo_shooter.setAngle(90);
+
+    }
+   
+  }
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
 
   }
 

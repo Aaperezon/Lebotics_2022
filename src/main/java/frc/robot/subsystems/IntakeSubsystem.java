@@ -20,11 +20,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
   }
   public void lower(double speed){
-    if(Constants.intake_lower_switch.get()){
-      Constants.intake_servo.set(-speed);
-    }else{
-      stop_servo();
-    }
+    Constants.intake_servo.set(-speed);
   }
   public void stop_servo(){
     Constants.intake_servo.set(0);

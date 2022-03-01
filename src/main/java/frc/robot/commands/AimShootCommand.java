@@ -18,8 +18,8 @@ public class AimShootCommand extends CommandBase {
   private PIDController aim_pid;
 
   boolean terminate;
-
-  public AimShootCommand(ChassisSubsystem chassis_subsystem, ShooterSubsystem shooter_subsystem) {
+  double pipeline;
+  public AimShootCommand(ChassisSubsystem chassis_subsystem, ShooterSubsystem shooter_subsystem, double pipeline) {
 
     this.chassis_subsystem = chassis_subsystem;
     addRequirements(chassis_subsystem);
@@ -29,28 +29,41 @@ public class AimShootCommand extends CommandBase {
     shoot_pid = new PIDController(.025, 0, 0);
     this.shooter_subsystem = shooter_subsystem;
     addRequirements(shooter_subsystem);
+    this.pipeline = pipeline;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setDouble(pipeline);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //AIM
-    double x_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-    double chassis_speed = aim_pid.calculate(x_target, 0);
-    // System.out.println(speed);
-    chassis_subsystem.drive(-chassis_speed, chassis_speed);
+    pipeline = NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").getDouble(0);
+    if(pipeline == 0){
+      reflectivePipeline();
+    }else if(pipeline == 1){
 
+    }else if(pipeline == 2){
 
-    //SHOOT
-    double y_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-    double shooter_speed = shoot_pid.calculate(y_target, 0);
-    shooter_subsystem.startEngine(shooter_speed);
-    SmartDashboard.putNumber("RPM", shooter_subsystem.getRPM());
+    }
+   
 
+  }
+  private void reflectivePipeline(){
+     //AIM WITH CHASSIS
+     double x_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+     double chassis_speed = aim_pid.calculate(x_target, 0);
+     // System.out.println(speed);
+     chassis_subsystem.drive(-chassis_speed, chassis_speed);
+ 
+     //SHOOT
+     double y_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+     double shooter_speed = shoot_pid.calculate(y_target, 0);
+     shooter_subsystem.startEngine(shooter_speed);
+     SmartDashboard.putNumber("RPM", shooter_subsystem.getRPM());
   }
 
   // Called once the command ends or is interrupted.

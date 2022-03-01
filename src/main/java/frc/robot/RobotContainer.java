@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.commands.Autonomous;
 import frc.robot.commands.AutonomousShoot;
 import frc.robot.commands.ChassisCommand;
 import frc.robot.commands.ClimberCommand;
@@ -25,7 +26,8 @@ public class RobotContainer {
   private final ChassisCommand chassisCommand = new ChassisCommand(chassisSubsystem);
 
   
-  private final AutonomousShoot autonomousShoot = new AutonomousShoot(chassisSubsystem, shooterSubsystem);
+  // private final AutonomousShoot autonomousShoot = new AutonomousShoot(chassisSubsystem, shooterSubsystem);
+  private final Autonomous autonomousDrive = new Autonomous(chassisSubsystem, shooterSubsystem);
 
   public RobotContainer() {
     configureButtonBindings();
@@ -34,8 +36,9 @@ public class RobotContainer {
 
   private void configureButtonBindings() {}
 
-  public Command getAutonomousShoot(){
-    return autonomousShoot;
+ 
+  public Command getAutonomous(){
+    return autonomousDrive;
   }
 
   public Command getShooterCommand(){

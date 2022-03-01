@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -17,20 +16,17 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 public final class Constants {
     public static XboxController driver1 = new XboxController(0);
     public static XboxController driver2 = new XboxController(1);
+    // public static PS4Controller driver2 = new PS4Controller(1);
 
 
     public static Spark shooter_motor = new Spark(9);
-    public static Encoder shooter_encoder = new Encoder(9,8);
-    private static final double counts_per_revolution = 5; 
-    private static final double wheel_diameter = 6; 
-    public static final PIDController shooter_pid = new PIDController(0, 0, 0);
-    public static final Servo left_servo = new Servo(7);
-    public static final Servo right_servo = new Servo(6);
+    public static Encoder shooter_encoder = new Encoder(8,9);
+    public static final Servo left_servo_shooter = new Servo(0);
+    public static final Servo right_servo_shooter = new Servo(1);
 
 
     public static Spark intake_servo = new Spark(8);
     public static DigitalInput intake_upper_switch = new DigitalInput(7);
-    public static DigitalInput intake_lower_switch = new DigitalInput(6);
     public static Spark intake_motor = new Spark(7);
 
 
@@ -38,6 +34,8 @@ public final class Constants {
     private static VictorSPX chassis_motor_left2 = new VictorSPX(2);
     private static VictorSPX chassis_motor_right1 = new VictorSPX(0);
     private static VictorSPX chassis_motor_right2 = new VictorSPX(3);
+    public static Encoder left_encoder = new Encoder(0,1);
+    public static Encoder right_encoder = new Encoder(2,3);
     
     
     public static Spark climber_left = new Spark(6);
@@ -45,8 +43,6 @@ public final class Constants {
 
 
     public Constants(){
-        Constants.shooter_encoder.setDistancePerPulse(Math.PI*Constants.wheel_diameter/Constants.counts_per_revolution); //distance per pulse is pi* (wheel diameter / counts per revolution)
-        
         //chassis_motor_right1.setInverted(true);
         //chassis_motor_left1.setInverted(true);
         //chassis_motor_right2.follow(chassis_motor_right1);

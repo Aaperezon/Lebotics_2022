@@ -4,11 +4,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class IntakeCommand extends CommandBase {
+public class IntakeCommand extends CommandBase 
+{
   private final IntakeSubsystem m_subsystem;
   private double  lower_value, max_speed;
   private boolean lift_value;
-  public IntakeCommand(IntakeSubsystem subsystem) {
+  public IntakeCommand(IntakeSubsystem subsystem) 
+  {
     m_subsystem = subsystem;
     addRequirements(subsystem);
     max_speed = 1;
@@ -18,33 +20,45 @@ public class IntakeCommand extends CommandBase {
   public void initialize() {}
 
   @Override
-  public void execute() {
+  public void execute() 
+  {
     lift_value = Constants.driver1.getXButton();
     lower_value = Constants.driver1.getLeftTriggerAxis();
+
     if(lift_value){
       m_subsystem.lift(1);
     }
     else if(lower_value >= .1){
       m_subsystem.lower(lower_value*max_speed);
-    }else{
+    }
+    else{
       m_subsystem.stop_servo();
     }
+
     double take_ball = Constants.driver1.getRightTriggerAxis();
-    if(take_ball >= .1){
+
+    if(take_ball >= .1)
+    {
       m_subsystem.forward(take_ball);
-    }else if(Constants.driver1.getBButton()){
+    }
+    
+    else if(Constants.driver1.getBButton())
+    {
       m_subsystem.backward();
-    }else{
+    }
+    
+    else
+    {
       m_subsystem.stop_motor();
     }
-
   }
 
   @Override
   public void end(boolean interrupted) {}
 
   @Override
-  public boolean isFinished() {
+  public boolean isFinished()
+  {
     return false;
   }
 }

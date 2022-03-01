@@ -60,7 +60,7 @@ public class Robot extends TimedRobot {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
     
-    m_autonomousCommand = m_robotContainer.getAutonomousShoot();
+    m_autonomousCommand = m_robotContainer.getAutonomous();
     m_autonomousCommand.schedule();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -88,7 +88,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+  }
 
   @Override
   public void testInit() {
