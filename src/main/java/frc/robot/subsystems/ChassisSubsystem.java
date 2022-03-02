@@ -4,50 +4,77 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class ChassisSubsystem extends SubsystemBase {
-  /** Creates a new ChassisSubsystem. */
+
+  
+  private static VictorSPX chassis_motor_left1 = new VictorSPX(1);
+  private static VictorSPX chassis_motor_left2 = new VictorSPX(2);
+  private static VictorSPX chassis_motor_right1 = new VictorSPX(0);
+  private static VictorSPX chassis_motor_right2 = new VictorSPX(3);
+  private static Encoder left_encoder = new Encoder(0,1);
+  private static Encoder right_encoder = new Encoder(2,3);
+
   private double speed, speedV;
   public ChassisSubsystem() {
     speed = 1;
     speedV = .4;
+    left_encoder.setDistancePerPulse(Math.PI*15.24/360); //distance per pulse is pi* (wheel diameter / counts per revolution)
+    right_encoder.setDistancePerPulse(Math.PI*15.24/360); //distance per pulse is pi* (wheel diameter / counts per revolution)
+  }
+  public void resetEncoders(){
+    left_encoder.reset();
+    right_encoder.reset();
+  }
+  public double getLeftDistance(){
+    return left_encoder.getDistance();
+  }
+  public double getRightDistance(){
+    return right_encoder.getDistance();
   }
   public void drive(double left_speed, double right_speed){
     if( (left_speed >= .1 || left_speed <= -.1) && (right_speed >= .1 || right_speed <= -.1)){
-      Constants.drive(left_speed, right_speed);
+      chassis_motor_left1.set(ControlMode.PercentOutput ,left_speed);
+      chassis_motor_left2.set(ControlMode.PercentOutput, left_speed);
+      chassis_motor_right1.set(ControlMode.PercentOutput ,-right_speed);
+      chassis_motor_right2.set(ControlMode.PercentOutput ,-right_speed);
     }else{
-      Constants.drive(0, 0);
+      drive(0, 0);
     }
   }
   public void drive(double throttle1, double throttle_turn, boolean left, boolean right) {
 		if (throttle1 >= .1) {
 			if (throttle_turn >= 0.1) {
-        Constants.drive((throttle1 * speed), (throttle1 * speed) - (throttle_turn * speedV));
+        drive((throttle1 * speed), (throttle1 * speed) - (throttle_turn * speedV));
 			} else if (throttle_turn <= -0.1) {
-        Constants.drive((throttle1 * speed) - (-throttle_turn * speedV), (throttle1 * speed));
+        drive((throttle1 * speed) - (-throttle_turn * speedV), (throttle1 * speed));
 			} else {
-        Constants.drive( throttle1 * speed , throttle1 * speed);
+        drive( throttle1 * speed , throttle1 * speed);
 			}
 		} else if (throttle1 <= -.1) {
 			if (throttle_turn >= 0.1) {
-        Constants.drive( (throttle1 * speed), (throttle1 * speed) - (-throttle_turn * speedV));
+        drive( (throttle1 * speed), (throttle1 * speed) - (-throttle_turn * speedV));
 			} else if (throttle_turn <= -0.1) {
-        Constants.drive( (throttle1 * speed) - (throttle_turn * speedV), (throttle1 * speed));
+        drive( (throttle1 * speed) - (throttle_turn * speedV), (throttle1 * speed));
 			} else {
-        Constants.drive( throttle1 * speed, throttle1 * speed);
+        drive( throttle1 * speed, throttle1 * speed);
 			}
 		} 
     else if(left){
-      Constants.drive(-.8,.8);
+      drive(-.8,.8);
     }else if(right){
-      Constants.drive(.8,-.8);
+      drive(.8,-.8);
     }else {
-        Constants.drive( 0, 0 );
+        drive( 0, 0 );
 		}
 
 	} 
+  
  
   @Override
   public void periodic() {

@@ -4,38 +4,43 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  /** Creates a new IntakeSubsystem. */
+  
+  private static Spark intake_servo = new Spark(8);
+  private static DigitalInput intake_upper_switch = new DigitalInput(7);
+  private static Spark intake_motor = new Spark(7);
+  
   public IntakeSubsystem() {
   }
 
   public void lift(double speed){
-    if(Constants.intake_upper_switch.get()){
-      Constants.intake_servo.set(speed);
+    if(intake_upper_switch.get()){
+      intake_servo.set(speed);
     }else{
       stop_servo();
     }
   }
   public void lower(double speed){
-    Constants.intake_servo.set(-speed);
+    intake_servo.set(-speed);
   }
   public void stop_servo(){
-    Constants.intake_servo.set(0);
+    intake_servo.set(0);
   }
   public void forward(){
-    Constants.intake_motor.set(.8);
+    intake_motor.set(.8);
   }
   public void forward(double s){
-    Constants.intake_motor.set(s);
+    intake_motor.set(s);
   }
   public void backward(){
-    Constants.intake_motor.set(-1);
+    intake_motor.set(-1);
   }
   public void stop_motor(){
-    Constants.intake_motor.set(0);
+    intake_motor.set(0);
   }
 
   @Override

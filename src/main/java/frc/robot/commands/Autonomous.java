@@ -17,9 +17,10 @@ public class Autonomous extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new AutonomousDriveCommand(chassisSubsystem, 100, "distance"),
-      new AutonomousDriveCommand(chassisSubsystem, 37, "angle")
-      // new AimShootCommand(chassisSubsystem, shooterSubsystem, 0.0)
+      // new AutonomousDriveCommand(chassisSubsystem, -100, "distance"),
+      // new AutonomousDriveCommand(chassisSubsystem, 90, "angle")
+      // new AutonomousDriveCommand(chassisSubsystem, -300, "distance")
+      new AimShootCommand(chassisSubsystem, shooterSubsystem, 1.0)
       
       );
   }

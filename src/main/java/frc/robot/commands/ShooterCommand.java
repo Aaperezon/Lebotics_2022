@@ -22,17 +22,16 @@ public class ShooterCommand extends CommandBase {
   public ShooterCommand(ShooterSubsystem subsystem) {
     m_subsystem = subsystem;
     addRequirements(subsystem);
-    Constants.shooter_encoder.setDistancePerPulse(Math.PI*15.24/5); //distance per pulse is pi* (wheel diameter / counts per revolution)
-    shooter_pid = new PIDController(.02, 0, 0);
+    shooter_pid = new PIDController(.01, 0, 0);
     shooter_pid.reset();
-    Constants.shooter_encoder.reset();
+    m_subsystem.resetEncoder();
 
   }
 
   @Override
   public void initialize() {
     shooter_pid.reset();
-    Constants.shooter_encoder.reset();
+    m_subsystem.resetEncoder();
    
   }
 
@@ -42,13 +41,14 @@ public class ShooterCommand extends CommandBase {
     
     if(shoot_on) {
       double shooter_speed = shooter_pid.calculate(m_subsystem.getRPM(), m_subsystem.getTargetRPM());
-      m_subsystem.startEngine(shooter_speed);
+      m_subsystem.startEngine(-shooter_speed);
       SmartDashboard.putBoolean("Action", true);
+      System.out.println(-shooter_speed);
     }else{
       m_subsystem.stop();
       SmartDashboard.putBoolean("Action", false);
       shooter_pid.reset();
-      Constants.shooter_encoder.reset();
+      m_subsystem.resetEncoder();
     }
     if (Constants.driver2.getBButton() == true) {
       if (!shoot_off) {
@@ -72,6 +72,8 @@ public class ShooterCommand extends CommandBase {
 
     SmartDashboard.putNumber("Target", m_subsystem.getTargetRPM());
     SmartDashboard.putNumber("RPM", m_subsystem.getRPM());
+    //SHOOT
+    m_subsystem.shoot(Constants.driver2.getLeftBumper());
 
 
     // m_subsystem.setkP(.02); 
@@ -89,7 +91,6 @@ public class ShooterCommand extends CommandBase {
     //   m_subsystem.stop();
     // }
 
-    // m_subsystem.shoot(Constants.driver2.getLeftBumper());
 
     
     // //SpeedUp
