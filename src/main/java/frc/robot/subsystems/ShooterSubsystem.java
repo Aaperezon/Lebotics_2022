@@ -23,8 +23,9 @@ public class ShooterSubsystem extends SubsystemBase {
   private boolean modify_up, modify_down;
   private double target;
   long start_time, end_time, current_time, target_time;
-
+  private double speed;
   public ShooterSubsystem() {
+    speed = 0;
     interval = .1;
     MAX_speed_motor = 1.0;
     MIN_speed_motor = -1.0;
@@ -44,8 +45,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void resetEncoder(){
     shooter_encoder.reset();
   }
-
-
 
   public void setTargetRPM(double new_target){
     target = new_target;
@@ -74,26 +73,26 @@ public class ShooterSubsystem extends SubsystemBase {
     modify_up = true;
     modify_down = true;
   }
-  // public void speedUp(){
-  //   if(speed < MAX_speed_motor && modify_up == true){
-  //     speed+=interval;
-  //     modify_up = false;
-  //   }
-  // }
-  // public void speedDown(){
-  //   if(speed > MIN_speed_motor && modify_down == true){
-  //     speed-=interval;
-  //     modify_down = false;
-  //   }
-  // }
-  // public void setShooterSpeed(double speed_){
-  //   if(speed < MAX_speed_motor && speed > MIN_speed_motor){
-  //     speed = speed_;
-  //   }
-  // }
-  // public void startEngine(){
-  //   shooter_motor.set(speed);
-  // }
+  public void speedUp(){
+    if(speed < MAX_speed_motor && modify_up == true){
+      speed+=interval;
+      modify_up = false;
+    }
+  }
+  public void speedDown(){
+    if(speed > MIN_speed_motor && modify_down == true){
+      speed-=interval;
+      modify_down = false;
+    }
+  }
+  public void setShooterSpeed(double speed_){
+    if(speed < MAX_speed_motor && speed > MIN_speed_motor){
+      speed = speed_;
+    }
+  }
+  public void startEngine(){
+    shooter_motor.set(speed);
+  }
   public void startEngine(double speed){
     shooter_motor.set(speed);
     // System.out.println(test);

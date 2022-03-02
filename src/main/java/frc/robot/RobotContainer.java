@@ -1,7 +1,6 @@
 package frc.robot;
 
 import frc.robot.commands.Autonomous;
-import frc.robot.commands.AutonomousShoot;
 import frc.robot.commands.ChassisCommand;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakeCommand;
