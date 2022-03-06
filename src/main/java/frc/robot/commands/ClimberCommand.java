@@ -25,8 +25,10 @@ public class ClimberCommand extends CommandBase
   public void execute() 
   {
     // m_subsystem.move(Constants.driver2.getLY());
-    m_subsystem.moveLeft(Constants.driver2.getLeftY());
-    m_subsystem.moveRight(Constants.driver2.getRightY());
+    // m_subsystem.moveLeft(Constants.driver2.getLeftY());
+    // m_subsystem.moveRight(Constants.driver2.getRightY());
+    m_subsystem.move(Constants.driver2.getLeftY());
+    m_subsystem.moveElbow(Constants.driver2.getRightY());
   }
 
   @Override

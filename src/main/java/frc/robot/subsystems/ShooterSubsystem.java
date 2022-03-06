@@ -5,19 +5,27 @@
 package frc.robot.subsystems;
 
 
+import com.revrobotics.AlternateEncoderType;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
   
-  private static Spark shooter_motor = new Spark(9);
-  private static Encoder shooter_encoder = new Encoder(8,9);
-  private static Servo left_servo_shooter = new Servo(0);
-  private static final Servo right_servo_shooter = new Servo(1);
-
-
+  // private static Spark shooter_motor = new Spark(9);
+  // private static Encoder shooter_encoder = new Encoder(8,9);
+  private static final CANSparkMax shooter_motor = new CANSparkMax(6, MotorType.kBrushless);
+  private static final Servo shooter_servo = new Servo(0);
+  private static final VictorSP shooter_rail = new VictorSP(7);
+  private static final Servo shooter_camera = new Servo(9);
   private double interval;
   private double MAX_speed_motor, MIN_speed_motor, MAX_rpm, MIN_rpm;
   private boolean modify_up, modify_down;
@@ -25,16 +33,17 @@ public class ShooterSubsystem extends SubsystemBase {
   long start_time, end_time, current_time, target_time;
   private double speed;
   public ShooterSubsystem() {
-    speed = 0;
+    shooter_motor.restoreFactoryDefaults();
+    speed = 0.5;
     interval = .1;
     MAX_speed_motor = 1.0;
-    MIN_speed_motor = -1.0;
+    MIN_speed_motor = 0;
     MAX_rpm = 5000;
     MIN_rpm = 0;
     modify_up = true;
     modify_down = true;
     start_time = System.currentTimeMillis();
-    shooter_encoder.setDistancePerPulse(Math.PI*15.24/5); //distance per pulse is pi* (wheel diameter / counts per revolution)
+    // shooter_encoder.setDistancePerPulse(Math.PI*15.24/5); //distance per pulse is pi* (wheel diameter / counts per revolution)
 
 
   }
@@ -43,7 +52,7 @@ public class ShooterSubsystem extends SubsystemBase {
     target = target_;
   }
   public void resetEncoder(){
-    shooter_encoder.reset();
+    // shooter_encoder.reset();
   }
 
   public void setTargetRPM(double new_target){
@@ -65,10 +74,17 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
   public double getRPM(){
-    return shooter_encoder.getRate()*60/120;
+    return shooter_motor.getEncoder().getVelocity();
+    // return shooter_encoder.getRate()*60/120;
   }
+  public void setCamera(){
+    shooter_camera.setAngle(0);
+  }
+  
  
-
+  public double getSpeed(){
+    return speed;
+  }
   public void canModify(){
     modify_up = true;
     modify_down = true;
@@ -95,7 +111,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public void startEngine(double speed){
     shooter_motor.set(speed);
-    // System.out.println(test);
   }
   
   public void stop(){
@@ -104,9 +119,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void shoot(boolean shoot){
     if(shoot){
-      left_servo_shooter.setAngle(0);
-      right_servo_shooter.setAngle(180);
-      start_time = System.currentTimeMillis();
+      shooter_servo.setAngle(0);
+      shooter_rail.set(-.15);
+      // start_time = System.currentTimeMillis();
     }else{
       // end_time = System.currentTimeMillis();
       // current_time = end_time - start_time;
@@ -115,9 +130,8 @@ public class ShooterSubsystem extends SubsystemBase {
       // }else{
       //   servo_shooter.setAngle(92);
       // }
-      left_servo_shooter.setAngle(90);
-      right_servo_shooter.setAngle(90);
-
+      shooter_rail.set(0);
+      shooter_servo.setAngle(90);
     }
    
   }

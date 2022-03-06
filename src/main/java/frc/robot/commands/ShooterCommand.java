@@ -17,14 +17,20 @@ public class ShooterCommand extends CommandBase {
   boolean camOn = false;
   private PIDController shooter_pid;
   boolean camOff = false;
-
+  private AutonomousDriveCommand auto_shoot;
+  private boolean auto_shoot_scheduled;
   private boolean shoot_on, shoot_off;
-  public ShooterCommand(ShooterSubsystem subsystem) {
+  private boolean engine_on, engine_off;
+  public ShooterCommand(ShooterSubsystem subsystem,  AutonomousDriveCommand auto_shoot) {
     m_subsystem = subsystem;
     addRequirements(subsystem);
-    shooter_pid = new PIDController(.01, 0, 0);
+    shooter_pid = new PIDController(.0001, 0, 0);
     shooter_pid.reset();
     m_subsystem.resetEncoder();
+    this.auto_shoot = auto_shoot;
+    auto_shoot_scheduled = false;
+    SmartDashboard.putBoolean("Auto Shoot", false);
+
 
   }
 
@@ -37,50 +43,43 @@ public class ShooterCommand extends CommandBase {
 
   @Override
   public void execute() {
+    System.out.println("shooter speed: "+0+ "   RPM:"+m_subsystem.getRPM());
     
-    
-    if(shoot_on) {
-      double shooter_speed = shooter_pid.calculate(m_subsystem.getRPM(), m_subsystem.getTargetRPM());
-      m_subsystem.startEngine(-shooter_speed);
+    if(engine_on) {
+      // double shooter_speed = shooter_pid.calculate(m_subsystem.getRPM(), m_subsystem.getTargetRPM());
+      m_subsystem.startEngine(-m_subsystem.getSpeed());
       SmartDashboard.putBoolean("Action", true);
-      System.out.println(-shooter_speed);
     }else{
       m_subsystem.stop();
       SmartDashboard.putBoolean("Action", false);
-      shooter_pid.reset();
-      m_subsystem.resetEncoder();
+      // shooter_pid.reset();
+      // m_subsystem.resetEncoder();
     }
     if (Constants.driver2.getBButton() == true) {
-      if (!shoot_off) {
-        shoot_on = !shoot_on;
-        shoot_off = true;
+      if (!engine_off) {
+        engine_on = !engine_on;
+        engine_off = true;
       }
     }
     else {
-      shoot_off = false;
+      engine_off = false;
     }
-    //set RPM for PID
-    if(Constants.driver2.getPOV() == 0){
-      m_subsystem.setMoreTargetRPM();
-    }
-    else if(Constants.driver2.getPOV() == 180){
-      m_subsystem.setLessTargetRPM();
-    }
-    else{
-      m_subsystem.canModify();
-    }
+    // //set RPM for PID
+    // if(Constants.driver2.getPOV() == 0){
+    //   m_subsystem.setMoreTargetRPM();
+    // }
+    // else if(Constants.driver2.getPOV() == 180){
+    //   m_subsystem.setLessTargetRPM();
+    // }
+    // else{
+    //   m_subsystem.canModify();
+    // }
 
-    SmartDashboard.putNumber("Target", m_subsystem.getTargetRPM());
-    SmartDashboard.putNumber("RPM", m_subsystem.getRPM());
+    SmartDashboard.putNumber("Target", m_subsystem.getSpeed());
+    // SmartDashboard.putNumber("RPM", m_subsystem.getRPM());
     //SHOOT
     m_subsystem.shoot(Constants.driver2.getLeftBumper());
-
-
-    // m_subsystem.setkP(.02); 
-    // m_subsystem.setkI(0); 
-    // m_subsystem.setkD(0); 
-    
-    
+    m_subsystem.setCamera();
 
 
     // // MANUAL USE
@@ -93,16 +92,16 @@ public class ShooterCommand extends CommandBase {
 
 
     
-    // //SpeedUp
-    // if(Constants.driver2.getPOV() == 0){
-    //   m_subsystem.speedUp();
-    // }
-    // else if(Constants.driver2.getPOV() == 180){
-    //   m_subsystem.speedDown();
-    // }
-    // else{
-    //   m_subsystem.canModify();
-    // }
+    //SpeedUp and SpeedDown
+    if(Constants.driver2.getPOV() == 0){
+      m_subsystem.speedUp();
+    }
+    else if(Constants.driver2.getPOV() == 180){
+      m_subsystem.speedDown();
+    }
+    else{
+      m_subsystem.canModify();
+    }
     
 
     //Change camera mode: target/nomal view
@@ -121,6 +120,31 @@ public class ShooterCommand extends CommandBase {
     }
     else {
       camOff = false;
+    }
+
+
+    if(shoot_on) {
+      if(auto_shoot_scheduled == false){
+        auto_shoot.schedule();
+        auto_shoot_scheduled = true;
+      }
+      SmartDashboard.putBoolean("Auto Shoot", true);
+    }else{
+      if(auto_shoot_scheduled == true){
+        auto_shoot.restartTimer();
+        auto_shoot.cancel();
+        auto_shoot_scheduled = false;
+      }
+      SmartDashboard.putBoolean("Auto Shoot", false);
+    }
+    if (Constants.driver2.getAButton()) {
+      if (!shoot_off) {
+        shoot_on = !shoot_on;
+        shoot_off = true;
+      }
+    }
+    else {
+      shoot_off = false;
     }
 
   }

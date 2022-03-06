@@ -44,7 +44,10 @@ public class ChassisSubsystem extends SubsystemBase {
       chassis_motor_right1.set(ControlMode.PercentOutput ,-right_speed);
       chassis_motor_right2.set(ControlMode.PercentOutput ,-right_speed);
     }else{
-      drive(0, 0);
+      chassis_motor_left1.set(ControlMode.PercentOutput ,0);
+      chassis_motor_left2.set(ControlMode.PercentOutput, 0);
+      chassis_motor_right1.set(ControlMode.PercentOutput ,0);
+      chassis_motor_right2.set(ControlMode.PercentOutput ,0);
     }
   }
   public void drive(double throttle1, double throttle_turn, boolean left, boolean right) {
@@ -66,9 +69,9 @@ public class ChassisSubsystem extends SubsystemBase {
 			}
 		} 
     else if(left){
-      drive(-.8,.8);
+      drive(-.6,.6);
     }else if(right){
-      drive(.8,-.8);
+      drive(.6,-.6);
     }else {
         drive( 0, 0 );
 		}

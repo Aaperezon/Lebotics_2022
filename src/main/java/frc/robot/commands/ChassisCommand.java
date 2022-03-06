@@ -20,7 +20,7 @@ public class ChassisCommand extends CommandBase
   public void execute() 
   {
     double throttle = -Constants.driver1.getLeftY();
-    double throttle_turn = Constants.driver1.getRightX();
+    double throttle_turn = Constants.driver1.getLeftX();
     boolean left = Constants.driver1.getLeftBumper();
     boolean right = Constants.driver1.getRightBumper();
     m_subsystem.drive(throttle, throttle_turn, left, right);
