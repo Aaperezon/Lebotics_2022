@@ -30,7 +30,7 @@ public class ShooterCommand extends CommandBase {
     this.auto_shoot = auto_shoot;
     auto_shoot_scheduled = false;
     SmartDashboard.putBoolean("Auto Shoot", false);
-
+    m_subsystem.setCamera();
 
   }
 
@@ -38,12 +38,12 @@ public class ShooterCommand extends CommandBase {
   public void initialize() {
     shooter_pid.reset();
     m_subsystem.resetEncoder();
+    m_subsystem.setCamera();
    
   }
 
   @Override
   public void execute() {
-    System.out.println("shooter speed: "+0+ "   RPM:"+m_subsystem.getRPM());
     
     if(engine_on) {
       // double shooter_speed = shooter_pid.calculate(m_subsystem.getRPM(), m_subsystem.getTargetRPM());
@@ -79,7 +79,6 @@ public class ShooterCommand extends CommandBase {
     // SmartDashboard.putNumber("RPM", m_subsystem.getRPM());
     //SHOOT
     m_subsystem.shoot(Constants.driver2.getLeftBumper());
-    m_subsystem.setCamera();
 
 
     // // MANUAL USE

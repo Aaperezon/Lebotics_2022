@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ChassisSubsystem;
@@ -20,7 +21,6 @@ public class AutonomousDriveCommand extends CommandBase
   private boolean terminate;
   private PIDController aim_pid;
   long start_time, end_time, current_time, target_time;
-
   public AutonomousDriveCommand(ChassisSubsystem chassisSubsystem, double target, String mode) 
   {
     this.chassis_subsystem = chassisSubsystem;
@@ -55,8 +55,9 @@ public class AutonomousDriveCommand extends CommandBase
     aim_pid = new PIDController(.017, 0, 0);
 
   }
-  public AutonomousDriveCommand(ChassisSubsystem chassis_subsystem, IntakeSubsystem intakeSubsystem) 
+  public AutonomousDriveCommand(ChassisSubsystem chassis_subsystem,ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem) 
   {
+    this.shooter_subsystem = shooterSubsystem;
     this.chassis_subsystem = chassis_subsystem;
     this.intake_subsystem = intakeSubsystem;
     addRequirements(chassis_subsystem);
@@ -107,7 +108,7 @@ public class AutonomousDriveCommand extends CommandBase
       double left_chassis_speed = left_drive_pid.calculate(left_distance, target_aux);
       // double right_chassis_speed = right_drive_pid.calculate(right_distance, -target_aux);
       chassis_subsystem.drive(left_chassis_speed, -left_chassis_speed);
-      System.out.println("ANGLE: "+target_aux+"  "+left_distance+"  "+right_distance+" || "+left_chassis_speed);
+      // System.out.println("ANGLE: "+target_aux+"  "+left_distance+"  "+right_distance+" || "+left_chassis_speed);
       if( target_aux > 0 && left_distance > target_aux)
         terminate = true;
       else if(target_aux < 0 && left_distance < target_aux )
@@ -123,7 +124,7 @@ public class AutonomousDriveCommand extends CommandBase
 
       double chassis_speed = left_drive_pid.calculate(left_distance, target);
       chassis_subsystem.drive(chassis_speed, chassis_speed);
-      System.out.println("DISTANCE:   "+left_distance+"  "+right_distance+" || "+chassis_speed);
+      // System.out.println("DISTANCE:   "+left_distance+"  "+right_distance+" || "+chassis_speed);
       if( target > 0 && left_distance > target - error ){
         terminate = true;
       }
@@ -131,9 +132,11 @@ public class AutonomousDriveCommand extends CommandBase
         terminate = true;
       }
     }else if(mode == "take_ball"){
+      shooter_subsystem.setAngle(100);
+
       String gameData = DriverStation.getGameSpecificMessage();
       if(gameData.length() > 0){
-        System.out.println(gameData.charAt(0));
+        // System.out.println(gameData.charAt(0));
         switch (gameData.charAt(0))
         {
           case 'B' :
@@ -173,6 +176,8 @@ public class AutonomousDriveCommand extends CommandBase
    
     }
     else if(mode == "shoot"){
+      shooter_subsystem.setAngle(35);
+
       NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setDouble(0);
       end_time = System.currentTimeMillis();
       current_time = end_time - start_time;
@@ -203,7 +208,7 @@ public class AutonomousDriveCommand extends CommandBase
   @Override
   public void end(boolean interrupted) 
   {
-    System.out.println("Termino");
+    // System.out.println("Termino");
     chassis_subsystem.drive(0, 0);
   }
 

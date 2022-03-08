@@ -47,6 +47,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
   }
+  public void setAngle(double deg){
+    shooter_camera.setAngle(deg);
+  }
  
   public void setTarget(double target_){
     target = target_;
@@ -78,7 +81,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // return shooter_encoder.getRate()*60/120;
   }
   public void setCamera(){
-    shooter_camera.setAngle(0);
+    shooter_camera.setAngle(90);
   }
   
  

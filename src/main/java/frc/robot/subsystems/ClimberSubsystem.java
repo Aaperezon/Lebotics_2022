@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +14,14 @@ public class ClimberSubsystem extends SubsystemBase {
   private static Spark climber_right = new Spark(5);
   private static VictorSP climber_left_elbow = new VictorSP(1);
   private static VictorSP climber_right_elbow = new VictorSP(2);
+  private static DigitalInput left_upper_limit = new DigitalInput(6);
+  private static DigitalInput left_lower_limit = new DigitalInput(7);
+
+  private static DigitalInput right_upper_limit = new DigitalInput(8);
+  private static DigitalInput right_lower_limit = new DigitalInput(9);
+
+
+
 
   public ClimberSubsystem() {}
   public void moveElbow(double speed){
@@ -24,16 +33,22 @@ public class ClimberSubsystem extends SubsystemBase {
     }
   }
   public void moveLeftElbow(double speed){
-    if(speed >= .1 || speed <= -.1){
+    if(speed >= .1 && left_upper_limit.get()){
       climber_left_elbow.set(speed);
-    }else{
+    }else if(speed <= -.1 && left_lower_limit.get()){
+      climber_left_elbow.set(speed);
+    }
+    else{
       stopElbow();
     }
   }
   public void moveRightElbow(double speed){
-    if(speed >= .1 || speed <= -.1){
+    if(speed > .1 && right_upper_limit.get()){
       climber_right_elbow.set(speed);
-    }else{
+    }else if(speed < -.1 && right_lower_limit.get()){
+      climber_right_elbow.set(speed);
+    }
+    else{
       stopElbow();
     }
   }
@@ -77,6 +92,5 @@ public class ClimberSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
 }

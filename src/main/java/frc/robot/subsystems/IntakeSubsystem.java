@@ -12,10 +12,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class IntakeSubsystem extends SubsystemBase {
   
   private static Spark intake_servo = new Spark(8);
-  private static DigitalInput intake_upper_switch = new DigitalInput(7);
-  private static DigitalInput intake_lower_switch = new DigitalInput(6);
+  private static DigitalInput intake_upper_switch = new DigitalInput(5);
+  private static DigitalInput intake_lower_switch = new DigitalInput(4);
   // private static Spark intake_motor = new Spark(7);
-  private static CANSparkMax intake_motor = new CANSparkMax(7, MotorType.kBrushed);
+  private static CANSparkMax intake_motor = new CANSparkMax(7, MotorType.kBrushless);
   
   public IntakeSubsystem() {
     // intake_motor.restoreFactoryDefaults();

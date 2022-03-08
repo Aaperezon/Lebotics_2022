@@ -21,7 +21,7 @@ public class RobotContainer {
   private final ShooterCommand shooterCommand = new ShooterCommand(shooterSubsystem, new AutonomousDriveCommand(chassisSubsystem, shooterSubsystem));
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, new AutonomousDriveCommand(chassisSubsystem, intakeSubsystem));
+  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, new AutonomousDriveCommand(chassisSubsystem,shooterSubsystem, intakeSubsystem));
 
   private final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
   private final ClimberCommand climberCommand = new ClimberCommand(climberSubsystem);
