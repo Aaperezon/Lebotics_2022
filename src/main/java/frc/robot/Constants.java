@@ -11,7 +11,9 @@ public final class Constants {
     public static XboxController driver2 = new XboxController(1);
     // public static PS4Controller driver2 = new PS4Controller(1);
 
-
+    public static final int camera_objective_reflective = 35;
+    public static final int camera_objective_ball = 135;
+    public static final int camera_objective_neutral = 90;
 
 
     

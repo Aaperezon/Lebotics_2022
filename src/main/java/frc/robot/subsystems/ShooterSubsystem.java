@@ -123,7 +123,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void shoot(boolean shoot){
     if(shoot){
       shooter_servo.setAngle(0);
-      shooter_rail.set(-.15);
+      shooter_rail.set(.55);
       // start_time = System.currentTimeMillis();
     }else{
       // end_time = System.currentTimeMillis();

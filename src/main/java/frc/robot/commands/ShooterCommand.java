@@ -102,14 +102,24 @@ public class ShooterCommand extends CommandBase {
       m_subsystem.canModify();
     }
     
+    double pipe = NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").getDouble(0);
+    if(pipe == 0){
+      m_subsystem.setAngle(Constants.camera_objective_reflective);
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+    }
+    else if(pipe == 1 || pipe == 2){
+      m_subsystem.setAngle(Constants.camera_objective_ball);
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
+    }else{
+      m_subsystem.setAngle(Constants.camera_objective_neutral);
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
+    }
 
     //Change camera mode: target/nomal view
     if(camOn) {
-      NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(1);
-      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
-    }else{
-      NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
-      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(4);
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
+
     }
     if (Constants.driver2.getStartButton()) {
       if (!camOff) {

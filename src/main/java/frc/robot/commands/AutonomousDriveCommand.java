@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ChassisSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -20,7 +21,7 @@ public class AutonomousDriveCommand extends CommandBase
   private String mode;
   private boolean terminate;
   private PIDController aim_pid;
-  long start_time, end_time, current_time, target_time;
+  private long start_time, end_time, current_time, target_time;
   public AutonomousDriveCommand(ChassisSubsystem chassisSubsystem, double target, String mode) 
   {
     this.chassis_subsystem = chassisSubsystem;
@@ -132,7 +133,7 @@ public class AutonomousDriveCommand extends CommandBase
         terminate = true;
       }
     }else if(mode == "take_ball"){
-      shooter_subsystem.setAngle(100);
+      shooter_subsystem.setAngle(Constants.camera_objective_ball);
 
       String gameData = DriverStation.getGameSpecificMessage();
       if(gameData.length() > 0){
@@ -158,15 +159,16 @@ public class AutonomousDriveCommand extends CommandBase
       double area_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
       double chassis_speed = left_drive_pid.calculate(x_target, 0);
       // System.out.println(speed);
-      chassis_subsystem.drive(.6-chassis_speed, .6+chassis_speed);
+      chassis_subsystem.drive(.4-chassis_speed, .4+chassis_speed);
 
       end_time = System.currentTimeMillis();
       current_time = end_time - start_time;
+      System.out.println(current_time);
       if(current_time < 1000){
         intake_subsystem.lower(.7);
-      }else{
-        intake_subsystem.backward(.7);
       }
+      intake_subsystem.backward(1);
+
 
       // System.out.println("GETTING BALL:   "+left_distance+"  "+right_distance+" || "+chassis_speed + " time: "+current_time);
       if(area_target >= 4){
@@ -176,7 +178,7 @@ public class AutonomousDriveCommand extends CommandBase
    
     }
     else if(mode == "shoot"){
-      shooter_subsystem.setAngle(35);
+      shooter_subsystem.setAngle(Constants.camera_objective_reflective);
 
       NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setDouble(0);
       end_time = System.currentTimeMillis();

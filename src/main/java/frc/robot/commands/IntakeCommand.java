@@ -46,20 +46,7 @@ public class IntakeCommand extends CommandBase
 
     // double take_ball = Constants.driver1.getRightTriggerAxis();
 
-    if(Constants.driver1.getBButton())
-    {
-      m_subsystem.backward();
-    }
     
-    else if(Constants.driver1.getXButton())
-    {
-      m_subsystem.forward();
-    }
-    
-    else
-    {
-      m_subsystem.stop_motor();
-    }
 
     
 
@@ -76,6 +63,15 @@ public class IntakeCommand extends CommandBase
         auto_intake_scheduled = false;
       }
       SmartDashboard.putBoolean("Auto Intake", false);
+      if(Constants.driver1.getBButton()){
+        m_subsystem.backward();
+      }
+      else if(Constants.driver1.getXButton()){
+        m_subsystem.forward();
+      }
+      else{
+        m_subsystem.stop_motor();
+      }
     }
     if (Constants.driver1.getAButton()) {
       if (!intake_off) {
