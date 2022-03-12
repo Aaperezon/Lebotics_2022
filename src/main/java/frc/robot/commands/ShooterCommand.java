@@ -78,7 +78,7 @@ public class ShooterCommand extends CommandBase {
     SmartDashboard.putNumber("Target", m_subsystem.getSpeed());
     // SmartDashboard.putNumber("RPM", m_subsystem.getRPM());
     //SHOOT
-    m_subsystem.shoot(Constants.driver2.getLeftBumper());
+    m_subsystem.shoot(Constants.driver2.getLeftBumper(),Constants.driver2.getRightBumper());
 
 
     // // MANUAL USE

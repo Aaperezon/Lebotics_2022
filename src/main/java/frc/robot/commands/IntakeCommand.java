@@ -63,10 +63,10 @@ public class IntakeCommand extends CommandBase
         auto_intake_scheduled = false;
       }
       SmartDashboard.putBoolean("Auto Intake", false);
-      if(Constants.driver1.getBButton()){
+      if(Constants.driver1.getXButton()){
         m_subsystem.backward();
       }
-      else if(Constants.driver1.getXButton()){
+      else if(Constants.driver1.getBButton()){
         m_subsystem.forward();
       }
       else{

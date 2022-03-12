@@ -51,6 +51,8 @@ public class ChassisSubsystem extends SubsystemBase {
     }
   }
   public void drive(double throttle1, double throttle_turn, boolean left, boolean right) {
+    throttle1*=.85;
+    throttle_turn*=.9;
 		if (throttle1 >= .1) {
 			if (throttle_turn >= 0.1) {
         drive((throttle1 * speed), (throttle1 * speed) - (throttle_turn * speedV));

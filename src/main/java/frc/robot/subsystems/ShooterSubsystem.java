@@ -120,11 +120,14 @@ public class ShooterSubsystem extends SubsystemBase {
     shooter_motor.set(0);
   }
 
-  public void shoot(boolean shoot){
+  public void shoot(boolean shoot, boolean reverse){
     if(shoot){
       shooter_servo.setAngle(0);
-      shooter_rail.set(.55);
+      shooter_rail.set(-.8);
       // start_time = System.currentTimeMillis();
+    }else if(reverse){
+      shooter_rail.set(.8);
+      shooter_servo.setAngle(0);
     }else{
       // end_time = System.currentTimeMillis();
       // current_time = end_time - start_time;
@@ -138,6 +141,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
    
   }
+ 
   @Override
   public void periodic() {
 

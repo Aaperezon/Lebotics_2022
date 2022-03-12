@@ -119,9 +119,9 @@ public class AutonomousDriveCommand extends CommandBase
     else if(mode == "distance")
     {
       int error = 10;
-      left_drive_pid.setP(.025);
+      left_drive_pid.setP(.027);
       left_drive_pid.setI(0);
-      left_drive_pid.setD(.008);
+      left_drive_pid.setD(0);
 
       double chassis_speed = left_drive_pid.calculate(left_distance, target);
       chassis_subsystem.drive(chassis_speed, chassis_speed);
@@ -180,26 +180,26 @@ public class AutonomousDriveCommand extends CommandBase
     else if(mode == "shoot"){
       shooter_subsystem.setAngle(Constants.camera_objective_reflective);
 
-      NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setDouble(0);
+      // NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setDouble(0);
       end_time = System.currentTimeMillis();
       current_time = end_time - start_time;
       if(current_time > 2000){
         //SHOOT
-        shooter_subsystem.shoot(true);
+        shooter_subsystem.shoot(true, false);
       }
       //AIM WITH CHASSIS
-      double x_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-      double chassis_speed = aim_pid.calculate(x_target, 0);
-      chassis_subsystem.drive(-chassis_speed, chassis_speed);
+      // double x_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+      // double chassis_speed = aim_pid.calculate(x_target, 0);
+      // chassis_subsystem.drive(-chassis_speed, chassis_speed);
       //REV ENGINE
-      double shooter_speed = .4;
+      double shooter_speed = -.62;
       shooter_subsystem.startEngine(shooter_speed);
       SmartDashboard.putNumber("Target", shooter_speed);
 
       if(current_time > 5000){
         terminate = true;
         shooter_subsystem.stop();
-        shooter_subsystem.shoot(false);
+        shooter_subsystem.shoot(false,false);
       }
 
      

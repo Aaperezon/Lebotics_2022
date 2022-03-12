@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -81,6 +82,10 @@ public class Robot extends TimedRobot {
     intakeCommand.schedule();
     climberCommand.schedule();
     chassisCommand.schedule();
+    SmartDashboard.putBoolean("Shooter", shooterCommand.isFinished());
+    SmartDashboard.putBoolean("Intake", shooterCommand.isFinished());
+    SmartDashboard.putBoolean("Climber", shooterCommand.isFinished());
+    SmartDashboard.putBoolean("Chassis", shooterCommand.isFinished());
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
