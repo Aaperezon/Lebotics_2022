@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,7 @@ public class AutonomousDriveCommand extends CommandBase
   private boolean terminate;
   private PIDController aim_pid;
   private long start_time, end_time, current_time, target_time;
+  private ADIS16448_IMU gyro;
   public AutonomousDriveCommand(ChassisSubsystem chassisSubsystem, double target, String mode) 
   {
     this.chassis_subsystem = chassisSubsystem;
@@ -30,7 +32,7 @@ public class AutonomousDriveCommand extends CommandBase
     this.mode = mode;
     left_drive_pid = new PIDController(0, 0, 0);
     right_drive_pid = new PIDController(0, 0, 0);
-   
+    this.gyro = new ADIS16448_IMU();
     terminate = false;
     left_drive_pid.reset();
     right_drive_pid.reset();
@@ -76,9 +78,20 @@ public class AutonomousDriveCommand extends CommandBase
 
   }
 
+  public AutonomousDriveCommand(ChassisSubsystem chassisSubsystem, String test){
+    this.gyro = new ADIS16448_IMU();
+    this.chassis_subsystem = chassisSubsystem;
+    addRequirements(chassis_subsystem);
+    this.mode = test;
+    left_drive_pid = new PIDController(0, 0, 0);
+    right_drive_pid = new PIDController(0, 0, 0);
+    chassis_subsystem.resetEncoders();
+  }
+
   @Override
   public void initialize() 
   {
+    gyro.reset();
     left_drive_pid.reset();
     right_drive_pid.reset();
     terminate = false;
@@ -118,14 +131,14 @@ public class AutonomousDriveCommand extends CommandBase
     
     else if(mode == "distance")
     {
-      int error = 10;
-      left_drive_pid.setP(.027);
+      int error = 0;
+      left_drive_pid.setP(.013);
       left_drive_pid.setI(0);
-      left_drive_pid.setD(0);
+      left_drive_pid.setD(0.0018);
 
       double chassis_speed = left_drive_pid.calculate(left_distance, target);
       chassis_subsystem.drive(chassis_speed, chassis_speed);
-      // System.out.println("DISTANCE:   "+left_distance+"  "+right_distance+" || "+chassis_speed);
+      System.out.println("DISTANCE:   "+left_distance+"  "+right_distance+" || "+chassis_speed);
       if( target > 0 && left_distance > target - error ){
         terminate = true;
       }
@@ -196,13 +209,15 @@ public class AutonomousDriveCommand extends CommandBase
       shooter_subsystem.startEngine(shooter_speed);
       SmartDashboard.putNumber("Target", shooter_speed);
 
-      if(current_time > 5000){
+      if(current_time > 3000){
         terminate = true;
         shooter_subsystem.stop();
         shooter_subsystem.shoot(false,false);
       }
 
      
+    }else if(mode == "test"){
+      System.out.println(gyro.getAngle());
     }
     
   }

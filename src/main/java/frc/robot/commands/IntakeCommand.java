@@ -14,7 +14,7 @@ public class IntakeCommand extends CommandBase
   private boolean intake_on, intake_off;
   private AutonomousDriveCommand autoIntake;
   private boolean auto_intake_scheduled;
-  public IntakeCommand(IntakeSubsystem subsystem, AutonomousDriveCommand autoIntake ) 
+  public IntakeCommand(IntakeSubsystem subsystem ) 
   {
     m_subsystem = subsystem;
     addRequirements(subsystem);
@@ -47,41 +47,49 @@ public class IntakeCommand extends CommandBase
     // double take_ball = Constants.driver1.getRightTriggerAxis();
 
     
-
+    if(Constants.driver1.getXButton()){
+          m_subsystem.backward();
+        }
+        else if(Constants.driver1.getBButton()){
+          m_subsystem.forward();
+        }
+        else{
+          m_subsystem.stop_motor();
+        }
     
 
-    if(intake_on) {
-      if(auto_intake_scheduled == false){
-        autoIntake.schedule();
-        auto_intake_scheduled = true;
-      }
-      SmartDashboard.putBoolean("Auto Intake", true);
-    }else{
-      if(auto_intake_scheduled == true){
-        autoIntake.restartTimer();
-        autoIntake.cancel();
-        auto_intake_scheduled = false;
-      }
-      SmartDashboard.putBoolean("Auto Intake", false);
-      if(Constants.driver1.getXButton()){
-        m_subsystem.backward();
-      }
-      else if(Constants.driver1.getBButton()){
-        m_subsystem.forward();
-      }
-      else{
-        m_subsystem.stop_motor();
-      }
-    }
-    if (Constants.driver1.getAButton()) {
-      if (!intake_off) {
-        intake_on = !intake_on;
-        intake_off = true;
-      }
-    }
-    else {
-      intake_off = false;
-    }
+    // if(intake_on) {
+    //   if(auto_intake_scheduled == false){
+    //     autoIntake.schedule();
+    //     auto_intake_scheduled = true;
+    //   }
+    //   SmartDashboard.putBoolean("Auto Intake", true);
+    // }else{
+    //   if(auto_intake_scheduled == true){
+    //     autoIntake.restartTimer();
+    //     autoIntake.cancel();
+    //     auto_intake_scheduled = false;
+    //   }
+    //   SmartDashboard.putBoolean("Auto Intake", false);
+    //   if(Constants.driver1.getXButton()){
+    //     m_subsystem.backward();
+    //   }
+    //   else if(Constants.driver1.getBButton()){
+    //     m_subsystem.forward();
+    //   }
+    //   else{
+    //     m_subsystem.stop_motor();
+    //   }
+    // }
+    // if (Constants.driver1.getAButton()) {
+    //   if (!intake_off) {
+    //     intake_on = !intake_on;
+    //     intake_off = true;
+    //   }
+    // }
+    // else {
+    //   intake_off = false;
+    // }
 
   }
 

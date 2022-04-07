@@ -21,7 +21,7 @@ public class ShooterCommand extends CommandBase {
   private boolean auto_shoot_scheduled;
   private boolean shoot_on, shoot_off;
   private boolean engine_on, engine_off;
-  public ShooterCommand(ShooterSubsystem subsystem,  AutonomousDriveCommand auto_shoot) {
+  public ShooterCommand(ShooterSubsystem subsystem) {
     m_subsystem = subsystem;
     addRequirements(subsystem);
     shooter_pid = new PIDController(.0001, 0, 0);
@@ -102,18 +102,18 @@ public class ShooterCommand extends CommandBase {
       m_subsystem.canModify();
     }
     
-    double pipe = NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").getDouble(0);
-    if(pipe == 0){
-      m_subsystem.setAngle(Constants.camera_objective_reflective);
-      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
-    }
-    else if(pipe == 1 || pipe == 2){
-      m_subsystem.setAngle(Constants.camera_objective_ball);
-      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
-    }else{
-      m_subsystem.setAngle(Constants.camera_objective_neutral);
-      NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
-    }
+    // double pipe = NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").getDouble(0);
+    // if(pipe == 0){
+    //   m_subsystem.setAngle(Constants.camera_objective_reflective);
+    //   NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+    // }
+    // else if(pipe == 1 || pipe == 2){
+    //   m_subsystem.setAngle(Constants.camera_objective_ball);
+    //   NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
+    // }else{
+    //   m_subsystem.setAngle(Constants.camera_objective_neutral);
+    //   NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
+    // }
 
     //Change camera mode: target/nomal view
     if(camOn) {
@@ -132,29 +132,29 @@ public class ShooterCommand extends CommandBase {
     }
 
 
-    if(shoot_on) {
-      if(auto_shoot_scheduled == false){
-        auto_shoot.schedule();
-        auto_shoot_scheduled = true;
-      }
-      SmartDashboard.putBoolean("Auto Shoot", true);
-    }else{
-      if(auto_shoot_scheduled == true){
-        auto_shoot.restartTimer();
-        auto_shoot.cancel();
-        auto_shoot_scheduled = false;
-      }
-      SmartDashboard.putBoolean("Auto Shoot", false);
-    }
-    if (Constants.driver2.getAButton()) {
-      if (!shoot_off) {
-        shoot_on = !shoot_on;
-        shoot_off = true;
-      }
-    }
-    else {
-      shoot_off = false;
-    }
+    // if(shoot_on) {
+    //   if(auto_shoot_scheduled == false){
+    //     auto_shoot.schedule();
+    //     auto_shoot_scheduled = true;
+    //   }
+    //   SmartDashboard.putBoolean("Auto Shoot", true);
+    // }else{
+    //   if(auto_shoot_scheduled == true){
+    //     auto_shoot.restartTimer();
+    //     auto_shoot.cancel();
+    //     auto_shoot_scheduled = false;
+    //   }
+    //   SmartDashboard.putBoolean("Auto Shoot", false);
+    // }
+    // if (Constants.driver2.getAButton()) {
+    //   if (!shoot_off) {
+    //     shoot_on = !shoot_on;
+    //     shoot_off = true;
+    //   }
+    // }
+    // else {
+    //   shoot_off = false;
+    // }
 
   }
 
