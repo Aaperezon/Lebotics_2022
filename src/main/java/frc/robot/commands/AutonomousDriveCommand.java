@@ -14,7 +14,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutonomousDriveCommand extends CommandBase 
 {
-  private PIDController left_drive_pid,right_drive_pid;
+  private PIDController chassis_pid;
   ChassisSubsystem chassis_subsystem;
   IntakeSubsystem intake_subsystem;
   ShooterSubsystem shooter_subsystem;
@@ -22,22 +22,14 @@ public class AutonomousDriveCommand extends CommandBase
   private String mode;
   private boolean terminate;
   private PIDController aim_pid;
-  private long start_time, end_time, current_time, target_time;
-  private ADIS16448_IMU gyro;
+  private long start_time, end_time, current_time;
+  private static ADIS16448_IMU gyro = new ADIS16448_IMU();
   public AutonomousDriveCommand(ChassisSubsystem chassisSubsystem, double target, String mode) 
   {
     this.chassis_subsystem = chassisSubsystem;
     addRequirements(chassisSubsystem);
     this.target = target;
     this.mode = mode;
-    left_drive_pid = new PIDController(0, 0, 0);
-    right_drive_pid = new PIDController(0, 0, 0);
-    this.gyro = new ADIS16448_IMU();
-    terminate = false;
-    left_drive_pid.reset();
-    right_drive_pid.reset();
-
-    chassisSubsystem.resetEncoders();
     start_time = System.currentTimeMillis();
 
   }
@@ -46,16 +38,10 @@ public class AutonomousDriveCommand extends CommandBase
     this.shooter_subsystem = shooterSubsystem;
     addRequirements(chassis_subsystem);
     this.mode = "shoot";
-    left_drive_pid = new PIDController(0, 0, 0);
-    right_drive_pid = new PIDController(0, 0, 0);
    
-    terminate = false;
-    left_drive_pid.reset();
-    right_drive_pid.reset();
-
-    chassis_subsystem.resetEncoders();
     start_time = System.currentTimeMillis();
     aim_pid = new PIDController(.017, 0, 0);
+    aim_pid.reset();
 
   }
   public AutonomousDriveCommand(ChassisSubsystem chassis_subsystem,ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem) 
@@ -66,34 +52,23 @@ public class AutonomousDriveCommand extends CommandBase
     addRequirements(chassis_subsystem);
     this.target = 0;
     this.mode = "take_ball";
-    left_drive_pid = new PIDController(0, 0, 0);
-    right_drive_pid = new PIDController(0, 0, 0);
-   
-    terminate = false;
-    left_drive_pid.reset();
-    right_drive_pid.reset();
-
-    chassis_subsystem.resetEncoders();
     start_time = System.currentTimeMillis();
 
   }
 
   public AutonomousDriveCommand(ChassisSubsystem chassisSubsystem, String test){
-    this.gyro = new ADIS16448_IMU();
     this.chassis_subsystem = chassisSubsystem;
     addRequirements(chassis_subsystem);
     this.mode = test;
-    left_drive_pid = new PIDController(0, 0, 0);
-    right_drive_pid = new PIDController(0, 0, 0);
-    chassis_subsystem.resetEncoders();
   }
 
   @Override
   public void initialize() 
   {
     gyro.reset();
-    left_drive_pid.reset();
-    right_drive_pid.reset();
+
+    chassis_pid = new PIDController(0, 0, 0);
+    chassis_pid.reset();
     terminate = false;
     chassis_subsystem.resetEncoders();
     start_time = System.currentTimeMillis();
@@ -111,32 +86,29 @@ public class AutonomousDriveCommand extends CommandBase
 
     if(mode == "angle")
     {
-      left_drive_pid.setP(.038);
-      left_drive_pid.setI(0);
-      left_drive_pid.setD(.0013);
-      // right_drive_pid.setP(.017);
-      // right_drive_pid.setI(0);
-      // right_drive_pid.setD(0);
-      
-      double target_aux = target / 8;
-      double left_chassis_speed = left_drive_pid.calculate(left_distance, target_aux);
-      // double right_chassis_speed = right_drive_pid.calculate(right_distance, -target_aux);
-      chassis_subsystem.drive(left_chassis_speed, -left_chassis_speed);
-      // System.out.println("ANGLE: "+target_aux+"  "+left_distance+"  "+right_distance+" || "+left_chassis_speed);
-      if( target_aux > 0 && left_distance > target_aux)
+      chassis_pid.setP(.022);
+      chassis_pid.setI(.001);
+      chassis_pid.setD(.003);
+      double tolerance = 2;
+      double lecture = -gyro.getGyroAngleY();
+      double chassis_speed = chassis_pid.calculate(lecture, target);
+      // double right_chassis_speed =.calculate(right_distance, -target_aux);
+      chassis_subsystem.drive(chassis_speed, -chassis_speed);
+      System.out.println("ANGLE: "+lecture+"        "+chassis_speed);
+      if( target > 0 && lecture > target-tolerance)
         terminate = true;
-      else if(target_aux < 0 && left_distance < target_aux )
+      else if(target < 0 && lecture < target+tolerance )
         terminate = true;
     }
     
     else if(mode == "distance")
     {
       int error = 0;
-      left_drive_pid.setP(.013);
-      left_drive_pid.setI(0);
-      left_drive_pid.setD(0.0018);
+      chassis_pid.setP(.013);
+      chassis_pid.setI(0);
+      chassis_pid.setD(0.0018);
 
-      double chassis_speed = left_drive_pid.calculate(left_distance, target);
+      double chassis_speed = chassis_pid.calculate(left_distance, target);
       chassis_subsystem.drive(chassis_speed, chassis_speed);
       System.out.println("DISTANCE:   "+left_distance+"  "+right_distance+" || "+chassis_speed);
       if( target > 0 && left_distance > target - error ){
@@ -165,12 +137,12 @@ public class AutonomousDriveCommand extends CommandBase
             return;
         }
       }
-      left_drive_pid.setP(.017);
-      left_drive_pid.setI(0);
-      left_drive_pid.setD(0);
+      chassis_pid.setP(.017);
+      chassis_pid.setI(0);
+      chassis_pid.setD(0);
       double x_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
       double area_target = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-      double chassis_speed = left_drive_pid.calculate(x_target, 0);
+      double chassis_speed = chassis_pid.calculate(x_target, 0);
       // System.out.println(speed);
       chassis_subsystem.drive(.4-chassis_speed, .4+chassis_speed);
 
@@ -217,7 +189,7 @@ public class AutonomousDriveCommand extends CommandBase
 
      
     }else if(mode == "test"){
-      System.out.println(gyro.getAngle());
+      System.out.println(gyro.getGyroAngleY());
     }
     
   }

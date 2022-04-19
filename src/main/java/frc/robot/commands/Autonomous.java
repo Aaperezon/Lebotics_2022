@@ -8,7 +8,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class Autonomous extends SequentialCommandGroup {
   public Autonomous(ChassisSubsystem chassisSubsystem, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem) {
     addCommands(
-      new AutonomousDriveCommand(chassisSubsystem, "test")
+      new AutonomousDriveCommand(chassisSubsystem, 100, "distance")
     
       );
   }
